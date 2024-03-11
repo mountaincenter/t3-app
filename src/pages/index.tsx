@@ -58,15 +58,28 @@ export default function Home() {
 function AuthShowcase() {
   const { data: sessionData } = useSession();
 
+  console.log("sessionData:", sessionData);
+
   const { data: secretMessage } = api.post.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined }
+    { enabled: sessionData?.user !== undefined },
   );
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+        {sessionData && (
+          <>
+            <span>Logged in as {sessionData.user?.name}</span>
+            <div className="mt-2">
+              <img
+                src={sessionData.user.image}
+                alt={`${sessionData.user.name}'s profile picture`}
+                className="h-12 w-12 rounded-full"
+              />
+            </div>
+          </>
+        )}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
       <button
